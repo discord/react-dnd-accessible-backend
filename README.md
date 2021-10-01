@@ -1,7 +1,15 @@
 # react-dnd-accessible-backend
 
-An add-on backend for `react-dnd` that provides support for keyboards and screenreaders by default.
+An add-on backend for [`react-dnd`](https://react-dnd.github.io/react-dnd/about) that provides support for keyboards and screenreaders by default.
 Keep writing the same drag and drop code while enabling more users to interact with your app.
+
+## Why
+
+`react-dnd` (and the system of packages it manages) does not directly support drag and drop other than using a mouse (or a finger on mobile devices). It encapsulates the [HTML5 Drag and Drop API](https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API), which _could_ support other input devices, but most browser implementations today only support pointers. `react-dnd` also does not provide any way of notifying screenreaders that drag and drop operations are happening. Again, the HTML5 API makes this _possible_, but it is not supported in any meaningful way.
+
+Other drag and drop implementations out there _do_ support these features, such as [`react-beautiful-dnd`](https://github.com/atlassian/react-beautiful-dnd) and [`dndkit`](https://dndkit.com/), and they do it well. However, `react-dnd` remains by far the most popular drag and drop library for React applications and is likely stay in that position for a while.
+
+This package brings support for both alternative input devices like keyboards (or anything that can trigger keyboard events in the browser) as well as announcements for screenreaders to `react-dnd` natively, without changing any of the public API that developers are used to or limiting of the structural flexibility it is known for.
 
 ## Installation
 
@@ -54,6 +62,12 @@ function App() {
 ```
 
 That's all it takes to get started! There are a few [considerations](#considerations) you'll want to keep in mind to ensure a really good experience for your users, but everything else should be automatic.
+
+At the moment, the keybinds used for drag and drop are hard-coded as:
+- `ctrl+d` (`command+d` on macOS) to pick up a draggable item
+- up and down arrow keys to move between drop targets
+- `Enter` or `Spacebar` to drop the dragged item on a drop target
+- `Escape` while dragging to cancel the drag operation
 
 ## Options
 
