@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "checkJs": false,
+    "jsx": "react",
+    "module": "commonjs",
+    "noEmit": true,
+    "noImplicitAny": true,
+    "sourceMap": true,
+    "strict": true,
+    "target": "esnext",
+    "resolveJsonModule": true,
+    "typeRoots": ["node_modules/@types"],
+    "lib": ["esnext", "dom"]
+  }
+}
