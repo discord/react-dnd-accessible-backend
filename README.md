@@ -173,7 +173,7 @@ Additionally, sorting on hover means that a user "browsing" through drop targets
 The best way to avoid this issue is to just avoid sorting in the `hover` callback and use drag placeholders and other indicators to show where an element will drop. This may involve some refactoring and rethinking designs, but the end result will be more accessible (and often more performant!) for everyone.
 
 
-### Thanks to
+# Thanks to
 
 - [`react-dnd-keyboard-backend`](https://github.com/mmissey/react-dnd-keyboard-backend) as an inspiration and proof-of-concept for keyboard-based backends.
 - [`react-dnd-multi-backend`](https://github.com/LouisBrunner/dnd-multi-backend/tree/main/packages/react-dnd-multi-backend) for making it possible to compose backends together.
