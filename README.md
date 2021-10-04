@@ -171,3 +171,10 @@ However, this pattern poses a problem for trying to drag and drop with a keyboar
 Additionally, sorting on hover means that a user "browsing" through drop targets will inadvertently be reorganizing their lists without ever actually dropping an item. If a user picks up an item, drags it up a few places, then decides to cancel the drag, the item will have moved those spaces anyway because the move happened on hover rather than when the item was actually dropped.
 
 The best way to avoid this issue is to just avoid sorting in the `hover` callback and use drag placeholders and other indicators to show where an element will drop. This may involve some refactoring and rethinking designs, but the end result will be more accessible (and often more performant!) for everyone.
+
+
+### Thanks to
+
+- [`react-dnd-keyboard-backend`](https://github.com/mmissey/react-dnd-keyboard-backend) as an inspiration and proof-of-concept for keyboard-based backends.
+- [`react-dnd-multi-backend`](https://github.com/LouisBrunner/dnd-multi-backend/tree/main/packages/react-dnd-multi-backend) for making it possible to compose backends together.
+- [`react-beautiful-dnd`](https://github.com/atlassian/react-beautiful-dnd) as a guiding example of what a good keyboard-based dnd interface could feel like.
