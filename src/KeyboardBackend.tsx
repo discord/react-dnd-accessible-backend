@@ -32,6 +32,7 @@ interface KeyboardBackendContext {
 
 interface KeyboardBackendOptions {
   onDndModeChanged?: (enabled: boolean) => unknown;
+  isDragTrigger?: (event: KeyboardEvent, isFirstEvent: boolean) => boolean;
   getAnnouncementMessages?: () => AnnouncementMessages;
   announcerClassName?: string;
   previewerClassName?: string;
@@ -53,6 +54,7 @@ export class KeyboardBackend implements Backend {
   private _navigator: DropTargetNavigator | undefined;
   public _previewer: DragPreviewer;
   private _announcer: DragAnnouncer;
+  private _isDragTrigger: (event: KeyboardEvent, isFirstEvent: boolean) => boolean;
   private _handlingFirstEvent: boolean = false;
 
   public constructor(
@@ -65,6 +67,7 @@ export class KeyboardBackend implements Backend {
     this.monitor = manager.getMonitor();
     this.context = context;
     this.options = options;
+    this._isDragTrigger = options?.isDragTrigger ?? isKeyboardDragTrigger;
 
     this.sourceNodes = new Map();
     this.sourcePreviewNodes = new Map();
@@ -157,7 +160,7 @@ export class KeyboardBackend implements Backend {
   };
 
   private handleDragStart = (sourceId: string, event: KeyboardEvent) => {
-    if (!isKeyboardDragTrigger(event, this._handlingFirstEvent)) return;
+    if (!this._isDragTrigger(event, this._handlingFirstEvent)) return;
     this._handlingFirstEvent = false;
 
     if (!this.monitor.canDragSource(sourceId)) return;

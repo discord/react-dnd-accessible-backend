@@ -1,15 +1,30 @@
 # react-dnd-accessible-backend
 
-An add-on backend for [`react-dnd`](https://react-dnd.github.io/react-dnd/about) that provides support for keyboards and screenreaders by default.
-Keep writing the same drag and drop code while enabling more users to interact with your app.
+An add-on backend for [`react-dnd`](https://react-dnd.github.io/react-dnd/about) that provides
+support for keyboards and screenreaders by default. Keep writing the same drag and drop code while
+enabling more users to interact with your app.
 
 ## Why
 
-`react-dnd` (and the system of packages it manages) does not directly support drag and drop other than using a mouse (or a finger on mobile devices). It encapsulates the [HTML5 Drag and Drop API](https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API), which _could_ support other input devices, but most browser implementations today only support pointers. `react-dnd` also does not provide any way of notifying screenreaders that drag and drop operations are happening. Again, the HTML5 API makes this _possible_, but it is not supported in any meaningful way.
+`react-dnd` (and the system of packages it manages) does not directly support drag and drop other
+than using a mouse (or a finger on mobile devices). It encapsulates the
+[HTML5 Drag and Drop API](https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API),
+which _could_ support other input devices, but most browser implementations today only support
+pointers. `react-dnd` also does not provide any way of notifying screenreaders that drag and drop
+operations are happening. Again, the HTML5 API makes this _possible_, but it is not supported in any
+meaningful way.
 
-Other drag and drop implementations out there _do_ support these features, such as [`react-beautiful-dnd`](https://github.com/atlassian/react-beautiful-dnd) and [`dndkit`](https://dndkit.com/), and they do it well. However, `react-dnd` remains by far the most popular drag and drop library for React applications and is likely stay in that position for a while as migrating between them is not easy, and the limitations of other systems keep many complex applications from moving at all.
+Other drag and drop implementations out there _do_ support these features, such as
+[`react-beautiful-dnd`](https://github.com/atlassian/react-beautiful-dnd) and
+[`dndkit`](https://dndkit.com/), and they do it well. However, `react-dnd` remains by far the most
+popular drag and drop library for React applications and is likely stay in that position for a while
+as migrating between them is not easy, and the limitations of other systems keep many complex
+applications from moving at all.
 
-This package brings support for both alternative input devices like keyboards (or anything that can trigger keyboard events in the browser) as well as announcements for screenreaders to `react-dnd` natively, without changing any of the public API that developers are used to or limiting of the structural flexibility it is known for.
+This package brings support for both alternative input devices like keyboards (or anything that can
+trigger keyboard events in the browser) as well as announcements for screenreaders to `react-dnd`
+natively, without changing any of the public API that developers are used to or limiting of the
+structural flexibility it is known for.
 
 ## Installation
 
@@ -25,15 +40,17 @@ npm install react-dnd-accessible-backend
 _additional_ one. This means you will most likely need to compose backends together to get all of
 the functionality you would like (mouse dragging, keyboards, pointer dragging on mobile, etc).
 
-One of the easiest ways to do this is with [`react-dnd-multi-backend`](https://www.npmjs.com/package/react-dnd-multi-backend)
-and it's Transition system. Using that library, just add another backend entry and create a Transition for the keyboard trigger, like so:
+One of the easiest ways to do this is with
+[`react-dnd-multi-backend`](https://www.npmjs.com/package/react-dnd-multi-backend) and it's
+Transition system. Using that library, just add another backend entry and create a Transition for
+the keyboard trigger, like so:
 
 ```typescript
-import KeyboardBackend, {isKeyboardDragTrigger} from 'react-dnd-accessible-backend';
-import {HTML5Backend} from 'react-dnd-html5-backend';
-import {DndProvider, createTransition} from 'react-dnd-multi-backend';
+import KeyboardBackend, { isKeyboardDragTrigger } from "react-dnd-accessible-backend";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import { DndProvider, createTransition } from "react-dnd-multi-backend";
 
-const KeyboardTransition = createTransition('keydown', (event) => {
+const KeyboardTransition = createTransition("keydown", (event) => {
   if (!isKeyboardDragTrigger(event as KeyboardEvent)) return false;
   event.preventDefault();
   return true;
@@ -42,14 +59,14 @@ const KeyboardTransition = createTransition('keydown', (event) => {
 const DND_OPTIONS = {
   backends: [
     {
-      id: 'html5',
+      id: "html5",
       backend: HTML5Backend,
       transition: MouseTransition,
     },
     {
-      id: 'keyboard',
+      id: "keyboard",
       backend: KeyboardBackend,
-      context: {window, document},
+      context: { window, document },
       preview: true,
       transition: KeyboardTransition,
     },
@@ -61,9 +78,12 @@ function App() {
 }
 ```
 
-That's all it takes to get started! There are a few [considerations](#considerations) you'll want to keep in mind to ensure a really good experience for your users, but everything else should be automatic.
+That's all it takes to get started! There are a few [considerations](#considerations) you'll want to
+keep in mind to ensure a really good experience for your users, but everything else should be
+automatic.
 
 At the moment, the keybinds used for drag and drop are hard-coded as:
+
 - `ctrl+d` (`command+d` on macOS) to pick up a draggable item
 - up and down arrow keys to move between drop targets
 - `Enter` or `Spacebar` to drop the dragged item on a drop target
@@ -71,17 +91,27 @@ At the moment, the keybinds used for drag and drop are hard-coded as:
 
 ## Options
 
-`react-dnd-accessible-backend` provides a few options for customizing styles and behavior for use in your app. If you're using `react-dnd-multi-backend`, these can get passed in as an `options` field on the backend configuration object, or otherwise as the third argment when calling the backend directly as a factory function (like `KeyboardBackend(manager, context, options)`.
+`react-dnd-accessible-backend` provides a few options for customizing styles and behavior for use in
+your app. If you're using `react-dnd-multi-backend`, these can get passed in as an `options` field
+on the backend configuration object, or otherwise as the third argment when calling the backend
+directly as a factory function (like `KeyboardBackend(manager, context, options)`.
 
 These options are:
 
 ### `getAnnouncementMessages?: () => AnnouncementMessages`
 
-This function is called any time a drag and drop action is performed by the keyboard backend and is useful for providing translations or more descriptive messages for screenreader users as they interact with draggable items.
+This function is called any time a drag and drop action is performed by the keyboard backend and is
+useful for providing translations or more descriptive messages for screenreader users as they
+interact with draggable items.
 
-If this option is not provided, a [default set of messages in English](https://github.com/discord/react-dnd-accessible-backend/blob/main/src/util/AnnouncementMessages.tsx#L16-L37) will be used. Providing a separate function requires that you specify a replacement for _all_ messages that can be announced. These (currently) are `pickedUpItem`, `droppedItem`, `hoveredTarget` and `canceledDrag`.
+If this option is not provided, a
+[default set of messages in English](https://github.com/discord/react-dnd-accessible-backend/blob/main/src/util/AnnouncementMessages.tsx#L16-L37)
+will be used. Providing a separate function requires that you specify a replacement for _all_
+messages that can be announced. These (currently) are `pickedUpItem`, `droppedItem`, `hoveredTarget`
+and `canceledDrag`.
 
-Each message getter is defined as a function that takes in an `itemId` and the HTML `node` that is relevant to the operation.
+Each message getter is defined as a function that takes in an `itemId` and the HTML `node` that is
+relevant to the operation.
 
 ```typescript
 // A very naive example of how to provide custom announcement messages.
@@ -95,58 +125,86 @@ function getCustomAnnouncementMessages() {
 }
 
 {
-  id: 'keyboard',
-  backend: KeyboardBackend,
-  context: {window, document},
   options: {
     getAnnouncementMessages: getCustomAnnouncementMessages,
   },
-  preview: true,
-  transition: KeyboardTransition,
 }
 ```
 
-### `announcerClassName`
+### `isDragTrigger?: (event: KeyboardEvent, isFirstEvent: boolean) => boolean`
 
-Screenreader announcements are performed by injecting an element into the DOM with an `aria-live` attribute that gets picked up by the screenreader. By default, this element is visually hidden and kept out of the way, but if you wish to style it in some other way, you can provide a custom class name with this option. The examples page in this repository does this to show the messages on the page for testing.
+This function is used to determine if a keyboard event that occurs on a draggable element should
+trigger the start of a drag operation. Overriding this option lets you customize the keybind used to
+start dragging or perform other checks before the drag is allowed to start.
+
+If this option is not provided, it will default to using the `isKeyboardDragTrigger` that is
+exported as part of this package, which triggers when `ctrl/command+d` is pressed.
+
+Ths `isFirstEvent` parameter indicates whether this is the first event the backend is receiving
+after being setup.
 
 ```typescript
 {
-  id: 'keyboard',
-  backend: KeyboardBackend,
-  context: {window, document},
+  options: {
+    // This will start a drag whenever the users presses
+    // `m` while focused on a draggable element.
+    isDragTrigger: (event) => event.key = "m"
+  },
+}
+```
+
+**NOTE:** In most cases when `react-dnd-multi-backend`, you'll want to use the same trigger function
+in this option for the trigger in `createTransition`. Otherwise the backend may not be set up when
+you expect to start a drag. This is also where the `isFirstEvent` property can come in handy, since
+`react-dnd-multi-backend` will sometimes fire cloned events that don't have keyboard properties on
+them. See the comment in
+[`isKeyboardDragTrigger`](https://github.com/discord/react-dnd-accessible-backend/blob/6b7413eed66630b5e8e00864c9a282124a9e484e/src/util/isKeyboardDragTrigger.tsx#L5-L10)
+for more information.
+
+### `announcerClassName`
+
+Screenreader announcements are performed by injecting an element into the DOM with an `aria-live`
+attribute that gets picked up by the screenreader. By default, this element is visually hidden and
+kept out of the way, but if you wish to style it in some other way, you can provide a custom class
+name with this option. The examples page in this repository does this to show the messages on the
+page for testing.
+
+```typescript
+{
   options: {
     announcerClassName: styles.dndAnnouncer,
   },
-  preview: true,
-  transition: KeyboardTransition,
 }
 ```
 
 ### `previewerClassName`
 
-Similar to the `announcerClassName` this option provides a custom class name to use for the drag previewer, which is a container that gets populated by a clone of the currently-dragged element and positions itself in the appropriate place on screen for the currently-hovered drop target.
+Similar to the `announcerClassName` this option provides a custom class name to use for the drag
+previewer, which is a container that gets populated by a clone of the currently-dragged element and
+positions itself in the appropriate place on screen for the currently-hovered drop target.
 
 ```typescript
 {
-  id: 'keyboard',
-  backend: KeyboardBackend,
-  context: {window, document},
   options: {
     previewerClassName: styles.dndDragPreview,
   },
-  preview: true,
-  transition: KeyboardTransition,
 }
 ```
 
-**NOTE:** It is important that this div does _not_ have any styles that affect its spatial positioning on screen, as this is controlled internally by the backend. What it _can_ be used for are things like adding a drop shadow or highlight to the drag preview, changing opacities, borders, scaling, and other stylistic options.
+**NOTE:** It is important that this div does _not_ have any styles that affect its spatial
+positioning on screen, as this is controlled internally by the backend. What it _can_ be used for
+are things like adding a drop shadow or highlight to the drag preview, changing opacities, borders,
+scaling, and other stylistic options.
 
 ## Considerations
 
 ### Ensuring accessible labels
 
-The default announcement messages will look at a few properties to try and create the most relevant label possible for the user. At the highest priority, if you specify a `data-dnd-name` attribute on the target element (either the drag source or the drop target, depending on the operation), that will be used directly. Next, it will look for an `aria-label` on the same element, and finally it will fall back to using the `innerText` of the element itself.
+The default announcement messages will look at a few properties to try and create the most relevant
+label possible for the user. At the highest priority, if you specify a `data-dnd-name` attribute on
+the target element (either the drag source or the drop target, depending on the operation), that
+will be used directly. Next, it will look for an `aria-label` on the same element, and finally it
+will fall back to using the `innerText` of the element itself.
 
 As an example:
 
@@ -159,22 +217,39 @@ As an example:
 <div ref={drag}>an element with text inside</div>
 ```
 
-While this _should_ ensure that any item a user picks up or drops has _some_ kind of label on it, falling back to the inner text should be a last resort, and ideally you should add an `aria-label` or at least a `data-dnd-name` to provide a more succinct, helpful label for screenreader users.
-
+While this _should_ ensure that any item a user picks up or drops has _some_ kind of label on it,
+falling back to the inner text should be a last resort, and ideally you should add an `aria-label`
+or at least a `data-dnd-name` to provide a more succinct, helpful label for screenreader users.
 
 ### "Sort on "hover"
 
-A common pattern with `react-dnd` is to perform sorting operations in the `hover` callback on drop targets. In fact this is how most of the [react-dnd sorting examples](https://codesandbox.io/s/github/react-dnd/react-dnd/tree/gh-pages/examples_hooks_ts/04-sortable/simple) operate.
+A common pattern with `react-dnd` is to perform sorting operations in the `hover` callback on drop
+targets. In fact this is how most of the
+[react-dnd sorting examples](https://codesandbox.io/s/github/react-dnd/react-dnd/tree/gh-pages/examples_hooks_ts/04-sortable/simple)
+operate.
 
-However, this pattern poses a problem for trying to drag and drop with a keyboard, because the user doesn't have the same granularity of control in movement. In the example linked above, sorting happens based on whether the user's mouse is dragging over the upper or lower half of the drop target. A keyboard user wouldn't be able to choose between those positions, so they effectively miss out on some sorting options, or in some cases the sorting won't happen at all since by default the drag operations go over the exact center of the drop target.
+However, this pattern poses a problem for trying to drag and drop with a keyboard, because the user
+doesn't have the same granularity of control in movement. In the example linked above, sorting
+happens based on whether the user's mouse is dragging over the upper or lower half of the drop
+target. A keyboard user wouldn't be able to choose between those positions, so they effectively miss
+out on some sorting options, or in some cases the sorting won't happen at all since by default the
+drag operations go over the exact center of the drop target.
 
-Additionally, sorting on hover means that a user "browsing" through drop targets will inadvertently be reorganizing their lists without ever actually dropping an item. If a user picks up an item, drags it up a few places, then decides to cancel the drag, the item will have moved those spaces anyway because the move happened on hover rather than when the item was actually dropped.
+Additionally, sorting on hover means that a user "browsing" through drop targets will inadvertently
+be reorganizing their lists without ever actually dropping an item. If a user picks up an item,
+drags it up a few places, then decides to cancel the drag, the item will have moved those spaces
+anyway because the move happened on hover rather than when the item was actually dropped.
 
-The best way to avoid this issue is to just avoid sorting in the `hover` callback and use drag placeholders and other indicators to show where an element will drop. This may involve some refactoring and rethinking designs, but the end result will be more accessible (and often more performant!) for everyone.
-
+The best way to avoid this issue is to just avoid sorting in the `hover` callback and use drag
+placeholders and other indicators to show where an element will drop. This may involve some
+refactoring and rethinking designs, but the end result will be more accessible (and often more
+performant!) for everyone.
 
 # Thanks to
 
-- [`react-dnd-keyboard-backend`](https://github.com/mmissey/react-dnd-keyboard-backend) as an inspiration and proof-of-concept for keyboard-based backends.
-- [`react-dnd-multi-backend`](https://github.com/LouisBrunner/dnd-multi-backend/tree/main/packages/react-dnd-multi-backend) for making it possible to compose backends together.
-- [`react-beautiful-dnd`](https://github.com/atlassian/react-beautiful-dnd) as a guiding example of what a good keyboard-based dnd interface could feel like.
+- [`react-dnd-keyboard-backend`](https://github.com/mmissey/react-dnd-keyboard-backend) as an
+  inspiration and proof-of-concept for keyboard-based backends.
+- [`react-dnd-multi-backend`](https://github.com/LouisBrunner/dnd-multi-backend/tree/main/packages/react-dnd-multi-backend)
+  for making it possible to compose backends together.
+- [`react-beautiful-dnd`](https://github.com/atlassian/react-beautiful-dnd) as a guiding example of
+  what a good keyboard-based dnd interface could feel like.
