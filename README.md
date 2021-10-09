@@ -148,7 +148,7 @@ after being setup.
   options: {
     // This will start a drag whenever the users presses
     // `m` while focused on a draggable element.
-    isDragTrigger: (event) => event.key = "m"
+    isDragTrigger: (event) => event.key === "m"
   },
 }
 ```
