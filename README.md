@@ -119,7 +119,7 @@ function getCustomAnnouncementMessages() {
   return {
     pickedUpItem: (itemId: string, node: HTMLElement | null) => `Picked up ${itemId}`,
     droppedItem: (itemId: string, node: HTMLElement | null) => `Dropped ${itemId}`,
-    hoveredTarget: (itemId: string, node: HTMLElement | null) => `Hoevered over ${itemId}`,
+    hoveredTarget: (itemId: string, node: HTMLElement | null) => `Hovered over ${itemId}`,
     canceledDrag: (itemId: string, node: HTMLElement | null) => "Drag cancelled"
   };
 }
