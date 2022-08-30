@@ -212,7 +212,7 @@ As an example:
 // This would read out "Picked up Example A" when it is picked up for dragging
 <div ref={drag} data-dnd-name="Example A" aria-label="some aria label" />
 // This would read out "Over Target B" when the user drags an item over it with the keyboard backend
-<dif ref={drop} aria-label="Target B" />
+<div ref={drop} aria-label="Target B" />
 // This would read out "Dropped an element with text inside" when it is dropped on a target
 <div ref={drag}>an element with text inside</div>
 ```
