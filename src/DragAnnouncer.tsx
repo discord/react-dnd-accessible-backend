@@ -4,7 +4,7 @@ type Assertiveness = 'assertive' | 'polite';
 export interface Announcer {
   announce(message: string, assertiveness?: Assertiveness, timeout?: number): void;
   clearAnnouncements(assertiveness?: Assertiveness): void;
-  destroy(): void;
+  destroy?(): void;
 }
 interface AnnouncerOptions {
   getAnnouncementMessages?: () => AnnouncementMessages;
@@ -13,13 +13,16 @@ interface AnnouncerOptions {
 
 export default class DragAnnouncer {
   private announcer: Announcer;
+  private externalAnnouncer: boolean;
   private getMessages: () => AnnouncementMessages;
 
   public constructor({getAnnouncementMessages, announcer}: AnnouncerOptions = {}) {
     this.getMessages = getAnnouncementMessages ?? getDefaultAnnouncementMessages;
+    this.externalAnnouncer = false;
 
     if (announcer != null) {
       this.announcer = announcer;
+      this.externalAnnouncer = true;
     } else {
       const LiveAnnouncer = require('@react-aria/live-announcer');
       this.announcer = {
@@ -53,6 +56,9 @@ export default class DragAnnouncer {
   }
 
   destroy() {
-    this.announcer.destroy?.();
+    // don't destroy an external announcer, since it is likely used outside of drag-and-drop
+    if (!this.externalAnnouncer) {
+      this.announcer.destroy?.();
+    }
   }
 }
