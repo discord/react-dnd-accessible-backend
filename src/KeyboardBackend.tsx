@@ -5,6 +5,7 @@ import getNodeClientOffset from "./util/getNodeClientOffset";
 import isKeyboardDragTrigger from "./util/isKeyboardDragTrigger";
 import stopEvent from "./util/stopEvent";
 
+import type {Announcer} from "./DragAnnouncer";
 import type {
   Backend,
   BackendFactory,
@@ -34,7 +35,7 @@ interface KeyboardBackendOptions {
   onDndModeChanged?: (enabled: boolean) => unknown;
   isDragTrigger?: (event: KeyboardEvent, isFirstEvent: boolean) => boolean;
   getAnnouncementMessages?: () => AnnouncementMessages;
-  announcerClassName?: string;
+  announcer?: Announcer;
   previewerClassName?: string;
 }
 
@@ -75,7 +76,7 @@ export class KeyboardBackend implements Backend {
     this.targetNodes = new Map();
 
     this._previewer = new DragPreviewer(context.document, options);
-    this._announcer = new DragAnnouncer(context.document, options);
+    this._announcer = new DragAnnouncer(options);
   }
 
   public setup() {
@@ -88,7 +89,6 @@ export class KeyboardBackend implements Backend {
     this.context.window?.addEventListener("keydown", this.handleGlobalKeyDown, { capture: true });
 
     this._previewer.attach();
-    this._announcer.attach();
   }
 
   public teardown() {
@@ -99,7 +99,7 @@ export class KeyboardBackend implements Backend {
     this.endDrag();
 
     this._previewer.detach();
-    this._announcer.detach();
+    this._announcer.destroy();
   }
 
   private handleGlobalKeyDown = (event: KeyboardEvent) => {

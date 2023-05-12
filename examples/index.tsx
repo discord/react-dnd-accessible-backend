@@ -32,9 +32,7 @@ const DND_OPTIONS = {
       id: "keyboard",
       backend: KeyboardBackend,
       context: { window, document },
-      options: {
-        announcerClassName: "announcer",
-      },
+      options: {},
       preview: true,
       transition: KeyboardTransition,
     },

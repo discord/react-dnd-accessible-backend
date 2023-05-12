@@ -57,6 +57,7 @@
     "url": "https://github.com/discord/react-dnd-accessible-backend/issues"
   },
   "dependencies": {
+    "@react-aria/live-announcer": "^3.3.0",
     "immutability-helper": "^3.1.1"
   }
 }

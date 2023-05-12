@@ -1,72 +1,58 @@
 import { AnnouncementMessages, getDefaultAnnouncementMessages } from "./util/AnnouncementMessages";
 
+type Assertiveness = 'assertive' | 'polite';
+export interface Announcer {
+  announce(message: string, assertiveness?: Assertiveness, timeout?: number): void;
+  clearAnnouncements(assertiveness?: Assertiveness): void;
+  destroy(): void;
+}
 interface AnnouncerOptions {
   getAnnouncementMessages?: () => AnnouncementMessages;
-  announcerClassName?: string;
+  announcer?: Announcer;
 }
 
 export default class DragAnnouncer {
-  private target: HTMLElement | undefined;
+  private announcer: Announcer;
   private getMessages: () => AnnouncementMessages;
 
-  public constructor(
-    private document: Document | undefined,
-    { getAnnouncementMessages, announcerClassName }: AnnouncerOptions = {},
-  ) {
+  public constructor({getAnnouncementMessages, announcer}: AnnouncerOptions = {}) {
     this.getMessages = getAnnouncementMessages ?? getDefaultAnnouncementMessages;
-    this.target = this.document?.createElement("span");
-    if (this.target != null) {
-      this.target.setAttribute("aria-live", "assertive");
-      this.target.setAttribute("aria-atomic", "true");
 
-      if (announcerClassName) {
-        this.target.className = announcerClassName;
-      } else {
-        this.target.className = "drag-announcer";
-        this.target.style.cssText =
-          "position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); border: 0;";
-      }
+    if (announcer != null) {
+      this.announcer = announcer;
+    } else {
+      const LiveAnnouncer = require('@react-aria/live-announcer');
+      this.announcer = {
+        announce: LiveAnnouncer.announce,
+        clearAnnouncements: LiveAnnouncer.clearAnnouncer,
+        destroy: LiveAnnouncer.destroyAnnouncer,
+      };
     }
-  }
-
-  attach() {
-    if (this.target == null) return;
-    this.document?.body.appendChild(this.target);
-  }
-
-  detach() {
-    const body = this.document?.body;
-    if (this.target == null || body == null) return;
-    if (body.contains(this.target)) {
-      body.removeChild(this.target);
-    }
-  }
-
-  announce(message: string) {
-    if (this.target == null) return;
-    this.target.innerText = message;
   }
 
   announceDrag(node: HTMLElement | null, id: string) {
     if (node == null) return;
-    this.announce(this.getMessages().pickedUpItem(id, node));
+    this.announcer.announce(this.getMessages().pickedUpItem(id, node));
   }
 
   announceHover(node: HTMLElement | null, id: string) {
     if (node == null) return;
-
-    this.announce(this.getMessages().hoveredTarget(id, node));
+    this.announcer.announce(this.getMessages().hoveredTarget(id, node));
   }
 
   announceDrop(node: HTMLElement | null, id: string) {
-    this.announce(this.getMessages().droppedItem(id, node));
+    this.announcer.announce(this.getMessages().droppedItem(id, node));
   }
 
   announceCancel(node: HTMLElement | null, id: string) {
-    this.announce(this.getMessages().canceledDrag(id, node));
+    this.announcer.announce(this.getMessages().canceledDrag(id, node));
   }
 
   clear() {
-    this.announce("");
+    this.announcer.clearAnnouncements();
+  }
+
+  destroy() {
+    this.announcer.destroy?.();
   }
 }
