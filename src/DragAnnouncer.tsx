@@ -33,22 +33,26 @@ export default class DragAnnouncer {
     }
   }
 
+  announce(message: string, assertiveness?: Assertiveness, timeout?: number) {
+    this.announcer.announce(message, assertiveness, timeout);
+  }
+
   announceDrag(node: HTMLElement | null, id: string) {
     if (node == null) return;
-    this.announcer.announce(this.getMessages().pickedUpItem(id, node));
+    this.announce(this.getMessages().pickedUpItem(id, node));
   }
 
   announceHover(node: HTMLElement | null, id: string) {
     if (node == null) return;
-    this.announcer.announce(this.getMessages().hoveredTarget(id, node));
+    this.announce(this.getMessages().hoveredTarget(id, node));
   }
 
   announceDrop(node: HTMLElement | null, id: string) {
-    this.announcer.announce(this.getMessages().droppedItem(id, node));
+    this.announce(this.getMessages().droppedItem(id, node));
   }
 
   announceCancel(node: HTMLElement | null, id: string) {
-    this.announcer.announce(this.getMessages().canceledDrag(id, node));
+    this.announce(this.getMessages().canceledDrag(id, node));
   }
 
   clear() {
