@@ -210,7 +210,7 @@ positioning on screen, as this is controlled internally by the backend. What it 
 are things like adding a drop shadow or highlight to the drag preview, changing opacities, borders,
 scaling, and other stylistic options.
 
-### `announcerClassName` (derecated)
+### `announcerClassName` (deprecated)
 
 Deprecated in version 2. To customize the presentation of drag-and-drop announcements, you can now
 use the `announcer` option to build your own custom announcer.
