@@ -7,7 +7,7 @@ export interface AnnouncementMessages {
   canceledDrag: ItemMessageGetter;
 }
 
-function getNodeDescription(node: HTMLElement | null): string | undefined {
+export function getNodeDescription(node: HTMLElement | null): string | undefined {
   if (node == null) return undefined;
 
   return node.getAttribute("data-dnd-name") ?? node.getAttribute("aria-label") ?? node.innerText;
