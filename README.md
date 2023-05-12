@@ -161,18 +161,32 @@ them. See the comment in
 [`isKeyboardDragTrigger`](https://github.com/discord/react-dnd-accessible-backend/blob/6b7413eed66630b5e8e00864c9a282124a9e484e/src/util/isKeyboardDragTrigger.tsx#L5-L10)
 for more information.
 
-### `announcerClassName`
+### `announcer`
 
-Screenreader announcements are performed by injecting an element into the DOM with an `aria-live`
-attribute that gets picked up by the screenreader. By default, this element is visually hidden and
-kept out of the way, but if you wish to style it in some other way, you can provide a custom class
-name with this option. The examples page in this repository does this to show the messages on the
-page for testing.
+By default, `react-dnd-accessible-backend` will append an `aria-live` area to the DOM to provide
+screen-reader announcements, powered by
+[`@react-aria/live-announcer`](https://github.com/adobe/react-spectrum/blob/main/packages/@react-aria/live-announcer/src/LiveAnnouncer.tsx).
+
+If you already have a comparable announcer utility in your app, then you can use the `announcer`
+option to replace `DragAnnouncer`'s announcer with your own. **Pease note that multiple `aria-live`
+areas in an app or web page could conflict**, which is why we have provided this override option to
+re-use any existing `aria-live` announcers.
 
 ```typescript
+interface Announcer {
+  announce(message: string, assertiveness?: 'assertive' | 'polite', timeout?: number): void;
+  clearAnnouncements(assertiveness?: 'assertive' | 'polite'): void;
+}
+
+const LiveAnnouncer = require('@react-aria/live-announcer');
+const AccessibilityAnnouncer: Announcer = {
+  announce: LiveAnnouncer.announce,
+  clearAnnouncements: LiveAnnouncer.clearAnnouncer,
+};
+
 {
   options: {
-    announcerClassName: styles.dndAnnouncer,
+    announcer: AccessibilityAnnouncer,
   },
 }
 ```
@@ -195,6 +209,23 @@ positions itself in the appropriate place on screen for the currently-hovered dr
 positioning on screen, as this is controlled internally by the backend. What it _can_ be used for
 are things like adding a drop shadow or highlight to the drag preview, changing opacities, borders,
 scaling, and other stylistic options.
+
+### `announcerClassName` (derecated)
+
+Deprecated in version 2. To customize the presentation of drag-and-drop announcements, you can now
+use the `announcer` option to build your own custom announcer.
+
+`react-dnd-accessible-backend` uses
+[`@react-aria/live-announcer`](https://github.com/adobe/react-spectrum/blob/main/packages/@react-aria/live-announcer/src/LiveAnnouncer.tsx)
+as its default announcer, which visually hides all announcements.
+
+```typescript
+{
+  options: {
+    announcerClassName: styles.dndAnnouncer,
+  },
+}
+```
 
 ## Considerations
 
@@ -253,3 +284,6 @@ performant!) for everyone.
   for making it possible to compose backends together.
 - [`react-beautiful-dnd`](https://github.com/atlassian/react-beautiful-dnd) as a guiding example of
   what a good keyboard-based dnd interface could feel like.
+- [`@react-aria/live-announcer`](https://github.com/adobe/react-spectrum/blob/main/packages/@react-aria/live-announcer/src/LiveAnnouncer.tsx)
+  and the [React Aria Team](https://react-spectrum.adobe.com/react-aria/) who are dedicated to
+  creating accessible components and tools.
