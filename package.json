@@ -37,8 +37,8 @@
     "prepublishOnly": "npm run -s build"
   },
   "peerDependencies": {
-    "react": "^16.8.0 || ^17.0.0",
-    "react-dnd": "14.0.0"
+    "react": ">=16.8.0",
+    "react-dnd": ">=14.0.0"
   },
   "devDependencies": {
     "@types/react": "17.0.26",
