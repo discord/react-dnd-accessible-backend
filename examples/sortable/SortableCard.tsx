@@ -44,27 +44,27 @@ interface DragItem {
 export function SortableCard({ id, text, index, moveCard }: SortableCardProps) {
   const ref = React.useRef<HTMLDivElement>(null);
 
-  const [{ isOver, isAbove, isBelow }, drop] = useDrop({
-    accept: ItemTypes.CARD,
+  const [{ isOver, isAbove, isBelow }, drop] = useDrop(() => ({
+    accept: [ItemTypes.CARD],
+    drop(item: DragItem) {
+      moveCard(item.index, index);
+    },
     collect(monitor) {
-      const dragIndex = monitor.getItem<DragItem | undefined>()?.index ?? -1;
+      const dragIndex = monitor.getItem()?.index ?? -1;
       return {
         isOver: monitor.isOver(),
         isAbove: dragIndex > index,
         isBelow: dragIndex < index,
       };
     },
-    drop(item: DragItem) {
-      moveCard(item.index, index);
-    },
-  });
+  }));
 
   const [{ isDragging }, drag] = useDrag({
     type: ItemTypes.CARD,
     item: () => {
       return { id, index };
     },
-    collect: (monitor: any) => ({
+    collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
   });

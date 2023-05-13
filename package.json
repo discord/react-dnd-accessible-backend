@@ -20,19 +20,26 @@
     "drop",
     "typescript"
   ],
-  "source": "src/index.tsx",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "module": "dist/index.module.js",
-  "unpkg": "dist/index.umd.js",
   "files": [
     "src",
     "dist"
   ],
+  "source": "src/index.tsx",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "sideEffects": [],
+  "exports": {
+    ".": "./src/index.tsx"
+  },
+  "publishConfig": {
+    "exports": {
+      ".": "./dist/index.js"
+    }
+  },
   "scripts": {
     "format": "prettier --write '**'",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rm -rf dist && microbundle --external react",
+    "build": "tsc -p tsconfig.build.json",
     "examples": "parcel serve examples/index.html",
     "prepublishOnly": "npm run -s build"
   },
@@ -43,15 +50,18 @@
   "devDependencies": {
     "@types/react": "17.0.26",
     "@types/react-dom": "17.0.9",
-    "microbundle": "^0.13.3",
     "parcel": "^2.0.0-rc.0",
     "prettier": "^2.0.4",
-    "react": "^17.0.2",
-    "react-dnd": "14.0.3",
-    "react-dnd-html5-backend": "14.0.1",
-    "react-dnd-multi-backend": "7.0.0-alpha.4",
-    "react-dom": "^17.0.2",
-    "typescript": "4.4.3"
+    "react": "^18.2.0",
+    "react-dnd": "16.0.0",
+    "react-dnd-html5-backend": "16.0.0",
+    "react-dnd-multi-backend": "8.0.0",
+    "react-dom": "^18.2.0",
+    "typescript": "5.0.4"
+  },
+  "engines": {
+    "npm": ">=7.0.0",
+    "node": ">=14.13.0"
   },
   "bugs": {
     "url": "https://github.com/discord/react-dnd-accessible-backend/issues"

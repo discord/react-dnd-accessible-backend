@@ -1,17 +1,16 @@
 {
   "compilerOptions": {
     "allowJs": true,
-    "allowSyntheticDefaultImports": true,
     "checkJs": false,
     "jsx": "react",
-    "module": "commonjs",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
     "noEmit": true,
     "noImplicitAny": true,
     "sourceMap": true,
     "strict": true,
     "target": "esnext",
-    "resolveJsonModule": true,
-    "typeRoots": ["node_modules/@types"],
+    "skipLibCheck": true,
     "lib": ["esnext", "dom"]
   }
 }
