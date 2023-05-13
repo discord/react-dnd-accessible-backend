@@ -18,7 +18,7 @@ importers:
       react-dnd: 16.0.1
       react-dnd-accessible-backend: workspace:*
       react-dnd-html5-backend: 16.0.1
-      react-dnd-multi-backend: 7.0.0
+      react-dnd-multi-backend: 8.0.0
       react-dom: ^18.2.0
       typescript: 5.0.4
       vite: ^4.3.5
@@ -28,7 +28,7 @@ importers:
       react-dnd: 16.0.1_ug65io7jkbhmo4fihdmbrh3ina
       react-dnd-accessible-backend: link:../react-dnd-accessible-backend
       react-dnd-html5-backend: 16.0.1
-      react-dnd-multi-backend: 7.0.0_b57ckgxx77373rey5kttpzfpiu
+      react-dnd-multi-backend: 8.0.0_b57ckgxx77373rey5kttpzfpiu
       react-dom: 18.2.0_react@18.2.0
     devDependencies:
       '@types/react': 18.0.17
@@ -574,7 +574,6 @@ packages:
       '@types/prop-types': 15.7.5
       '@types/scheduler': 0.16.3
       csstype: 3.1.2
-    dev: true
 
   /@types/react/18.0.17:
     resolution: {integrity: sha512-38ETy4tL+rn4uQQi7mB81G7V1g0u2ryquNmsVIOKUAEIDK+3CUjZ6rSRpdvS99dNBnkLFL83qfmtLacGOTIhwQ==}
@@ -668,13 +667,8 @@ packages:
       '@react-dnd/invariant': 4.0.2
       redux: 4.2.1
 
-  /dnd-multi-backend/7.1.3:
-    resolution: {integrity: sha512-INOAt4p/5fkaAUpXu0I+ialm1Ewi9HmIhs/558RFrhBZ0s/XGL991w3A2GvBuaPQNsZJEzCJh0mv/0dswxfSfQ==}
-    dev: false
-
   /dnd-multi-backend/8.0.0:
     resolution: {integrity: sha512-5iFo8USv3+q0kVRTm9zsuyi/5GRZEA6fDZKr9ZpmV5pUdHmL9ktL/2c2Anw8T2tnpDDw8FM3k2cvqyMAKhWd/w==}
-    dev: true
 
   /electron-to-chromium/1.4.394:
     resolution: {integrity: sha512-0IbC2cfr8w5LxTz+nmn2cJTGafsK9iauV2r5A5scfzyovqLrxuLoxOHE5OBobP3oVIggJT+0JfKnw9sm87c8Hw==}
@@ -820,20 +814,6 @@ packages:
     dependencies:
       dnd-core: 16.0.1
 
-  /react-dnd-multi-backend/7.0.0_b57ckgxx77373rey5kttpzfpiu:
-    resolution: {integrity: sha512-5fHcnvPHgvE7vMQiYXkd9A0B2Lvqvu40eZGX0pKGE3OHk9qAQBW6jhaXSyVwgBqCs1T22de04JUVRV5VwEPcaA==}
-    peerDependencies:
-      react: ^16.14.0 || ^17.0.2 || ^18.0.0
-      react-dom: ^16.14.0 || ^17.0.2 || ^18.0.0
-    dependencies:
-      dnd-multi-backend: 7.1.3
-      react: 18.2.0
-      react-dnd-preview: 7.1.3_ajxydgv6wvb6awzgtymnmahb3a
-      react-dom: 18.2.0_react@18.2.0
-    transitivePeerDependencies:
-      - react-dnd
-    dev: false
-
   /react-dnd-multi-backend/8.0.0_b57ckgxx77373rey5kttpzfpiu:
     resolution: {integrity: sha512-sYJmGUWRJsTa4sF/bxFu4tF/KSk668vf1TWbDqGdpvR9ltik/lBBqgihV3KLVtRRWytR/8wJCd9K5slj2Ve1tg==}
     peerDependencies:
@@ -846,17 +826,6 @@ packages:
       react-dom: 18.2.0_react@18.2.0
     transitivePeerDependencies:
       - react-dnd
-    dev: true
-
-  /react-dnd-preview/7.1.3_ajxydgv6wvb6awzgtymnmahb3a:
-    resolution: {integrity: sha512-vw3olTs2MVLm8MXBTM6L/znFhXxJSsRafoYMJAnKem4R9OcpE66Ff6GBK8dRuSB8kmoIeu3XjKZUaniUJ4qNLQ==}
-    peerDependencies:
-      react: ^16.14.0 || ^17.0.2 || ^18.0.0
-      react-dnd: 13.1.1 - 15.1.2
-    dependencies:
-      react: 18.2.0
-      react-dnd: 16.0.1_ug65io7jkbhmo4fihdmbrh3ina
-    dev: false
 
   /react-dnd-preview/8.0.0_ajxydgv6wvb6awzgtymnmahb3a:
     resolution: {integrity: sha512-pKDpJxaGya00tqPqswGHN6d1lmXe26gGkiXSb9xsDGEXMS+efjz4YAid9tKyaKNWJMU8hJOcUmJWTQpdi22P2g==}
@@ -866,7 +835,6 @@ packages:
     dependencies:
       react: 18.2.0
       react-dnd: 16.0.1_bdgigdncarkpn3bstlbsdrkiii
-    dev: true
 
   /react-dnd/16.0.1_bdgigdncarkpn3bstlbsdrkiii:
     resolution: {integrity: sha512-QeoM/i73HHu2XF9aKksIUuamHPDvRglEwdHL4jsp784BgUuWcg6mzfxT0QDdQz8Wj0qyRKx2eMg8iZtWvU4E2Q==}
@@ -890,7 +858,6 @@ packages:
       fast-deep-equal: 3.1.3
       hoist-non-react-statics: 3.3.2
       react: 18.2.0
-    dev: true
 
   /react-dnd/16.0.1_ug65io7jkbhmo4fihdmbrh3ina:
     resolution: {integrity: sha512-QeoM/i73HHu2XF9aKksIUuamHPDvRglEwdHL4jsp784BgUuWcg6mzfxT0QDdQz8Wj0qyRKx2eMg8iZtWvU4E2Q==}

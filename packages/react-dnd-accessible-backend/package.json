@@ -21,7 +21,6 @@
     "typescript"
   ],
   "files": [
-    "src",
     "dist"
   ],
   "source": "index.tsx",
