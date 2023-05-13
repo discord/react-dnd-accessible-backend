@@ -32,7 +32,7 @@ const DND_OPTIONS = {
       id: "keyboard",
       backend: KeyboardBackend,
       context: { window, document },
-      options: {},
+      options: { preview: false },
       preview: true,
       transition: KeyboardTransition,
     },
