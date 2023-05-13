@@ -1,6 +1,12 @@
 import { AnnouncementMessages, getDefaultAnnouncementMessages } from "./util/AnnouncementMessages";
+// It's a little annoying to have to statically require this. We _could_ make
+// it fully external and require consumers to provide it always, but ensuring
+// that an announcer exists implicitly feels more appropriate. Most consumers
+// likely won't override this, or will be overriding with the same library
+// anyway.
+import * as LiveAnnouncer from "@react-aria/live-announcer";
 
-type Assertiveness = 'assertive' | 'polite';
+type Assertiveness = "assertive" | "polite";
 export interface Announcer {
   announce(message: string, assertiveness?: Assertiveness, timeout?: number): void;
   clearAnnouncements(assertiveness?: Assertiveness): void;
@@ -16,7 +22,7 @@ export default class DragAnnouncer {
   private externalAnnouncer: boolean;
   private getMessages: () => AnnouncementMessages;
 
-  public constructor({getAnnouncementMessages, announcer}: AnnouncerOptions = {}) {
+  public constructor({ getAnnouncementMessages, announcer }: AnnouncerOptions = {}) {
     this.getMessages = getAnnouncementMessages ?? getDefaultAnnouncementMessages;
     this.externalAnnouncer = false;
 
@@ -24,7 +30,6 @@ export default class DragAnnouncer {
       this.announcer = announcer;
       this.externalAnnouncer = true;
     } else {
-      const LiveAnnouncer = require('@react-aria/live-announcer');
       this.announcer = {
         announce: LiveAnnouncer.announce,
         clearAnnouncements: LiveAnnouncer.clearAnnouncer,

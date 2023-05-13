@@ -1,0 +1,28 @@
+{
+  "name": "examples",
+  "private": true,
+  "version": "0.0.0",
+  "description": "",
+  "license": "MIT",
+  "author": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite dev"
+  },
+  "dependencies": {
+    "immutability-helper": "^3.1.1",
+    "react": "^18.2.0",
+    "react-dnd": "16.0.1",
+    "react-dnd-accessible-backend": "workspace:*",
+    "react-dnd-html5-backend": "16.0.1",
+    "react-dnd-multi-backend": "8.0.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "18.0.17",
+    "@types/react-dom": "18.0.6",
+    "@vitejs/plugin-react": "^4.0.0",
+    "typescript": "5.0.4",
+    "vite": "^4.3.5"
+  }
+}

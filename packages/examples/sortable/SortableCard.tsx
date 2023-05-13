@@ -31,38 +31,32 @@ const dropTargetBelowStyle: React.CSSProperties = {
 export interface SortableCardProps {
   id: any;
   text: string;
-  index: number;
-  moveCard: (dragIndex: number, hoverIndex: number) => void;
+  moveCard: (draggedId: number, hoveredId: number) => void;
 }
 
 interface DragItem {
   index: number;
-  id: string;
+  id: number;
   type: string;
 }
 
-export function SortableCard({ id, text, index, moveCard }: SortableCardProps) {
+export function SortableCard({ id, text, moveCard }: SortableCardProps) {
   const ref = React.useRef<HTMLDivElement>(null);
 
-  const [{ isOver, isAbove, isBelow }, drop] = useDrop(() => ({
+  const [{ isOver }, drop] = useDrop(() => ({
     accept: [ItemTypes.CARD],
     drop(item: DragItem) {
-      moveCard(item.index, index);
+      moveCard(item.id, id);
     },
-    collect(monitor) {
-      const dragIndex = monitor.getItem()?.index ?? -1;
-      return {
-        isOver: monitor.isOver(),
-        isAbove: dragIndex > index,
-        isBelow: dragIndex < index,
-      };
-    },
+    collect: (monitor) => ({
+      isOver: monitor.isOver(),
+    }),
   }));
 
   const [{ isDragging }, drag] = useDrag({
     type: ItemTypes.CARD,
     item: () => {
-      return { id, index };
+      return { id };
     },
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
@@ -74,9 +68,8 @@ export function SortableCard({ id, text, index, moveCard }: SortableCardProps) {
 
   return (
     <div ref={ref} style={{ ...style, opacity }} tabIndex={0}>
-      {isOver && isAbove ? <div style={dropTargetAboveStyle} /> : null}
+      {isOver ? <div style={dropTargetAboveStyle} /> : null}
       {text}
-      {isOver && isBelow ? <div style={dropTargetBelowStyle} /> : null}
     </div>
   );
 }
