@@ -2,20 +2,23 @@ import type { DragDropMonitor } from "dnd-core";
 
 interface PreviewerOptions {
   previewerClassName?: string;
+  preview?: boolean;
 }
 
 export default class DragPreview {
   private container: HTMLElement | undefined;
   private svg: HTMLElement | undefined;
   private foreignObject: HTMLElement | undefined;
+  private enabled: boolean;
 
   public constructor(
     private document: Document | undefined,
-    { previewerClassName }: PreviewerOptions = {},
+    { previewerClassName, preview }: PreviewerOptions = {},
   ) {
     this.container = this.document?.createElement("div");
     this.svg = this.document?.createElement("svg");
     this.foreignObject = this.document?.createElement("foreignObject");
+    this.enabled = preview ?? true;
 
     if (this.container != null && this.svg != null && this.foreignObject != null) {
       if (previewerClassName) {
@@ -31,7 +34,7 @@ export default class DragPreview {
   }
 
   attach() {
-    if (this.container == null) return;
+    if (this.container == null || !this.enabled) return;
     this.document?.body.appendChild(this.container);
   }
 
@@ -44,7 +47,8 @@ export default class DragPreview {
   }
 
   createDragPreview(sourceNode: HTMLElement) {
-    if (this.container == null || this.svg == null || this.foreignObject == null) return;
+    if (!this.enabled || this.container == null || this.svg == null || this.foreignObject == null)
+      return;
 
     const { width, height } = sourceNode.getBoundingClientRect();
 
@@ -62,6 +66,8 @@ export default class DragPreview {
   }
 
   render(monitor: DragDropMonitor) {
+    if (!this.enabled) return;
+
     const container = this.container;
     if (container == null) return;
 

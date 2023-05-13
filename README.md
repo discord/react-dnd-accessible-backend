@@ -210,6 +210,30 @@ positioning on screen, as this is controlled internally by the backend. What it 
 are things like adding a drop shadow or highlight to the drag preview, changing opacities, borders,
 scaling, and other stylistic options.
 
+### `preview`
+
+Control whether drag previews are rendered for this backend.
+
+`react-dnd-multi-backend` provides a configuration field, `preview`, when creating the backend
+pipeline, which determines whether previews are enabled or hidden when using a given backend.
+However, this only works by introspecting the MultiBackend manager when rendering a Preview from
+inside of a React component context (it relies on the Context API to access the backend manager and
+read the option).
+
+Because this library renders its own previews _outside_ of React, it has no access to the context,
+and can't get access to the MultiBackend instance to read that configuration.
+
+Instead, if you would like to hide the automatically-created previews when using this backend, pass
+this configuration under the `options` object:
+
+```typescript
+{
+  options: {
+    preview: false;
+  }
+}
+```
+
 ### `announcerClassName` (deprecated)
 
 Deprecated in version 2. To customize the presentation of drag-and-drop announcements, you can now

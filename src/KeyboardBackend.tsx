@@ -5,7 +5,7 @@ import getNodeClientOffset from "./util/getNodeClientOffset";
 import isKeyboardDragTrigger from "./util/isKeyboardDragTrigger";
 import stopEvent from "./util/stopEvent";
 
-import type {Announcer} from "./DragAnnouncer";
+import type { Announcer } from "./DragAnnouncer";
 import type {
   Backend,
   BackendFactory,
@@ -37,6 +37,7 @@ interface KeyboardBackendOptions {
   getAnnouncementMessages?: () => AnnouncementMessages;
   announcer?: Announcer;
   previewerClassName?: string;
+  preview?: boolean;
 }
 
 export class KeyboardBackend implements Backend {
@@ -55,6 +56,7 @@ export class KeyboardBackend implements Backend {
   private _navigator: DropTargetNavigator | undefined;
   public _previewer: DragPreviewer;
   private _announcer: DragAnnouncer;
+  private _previewEnabled: boolean;
   private _isDragTrigger: (event: KeyboardEvent, isFirstEvent: boolean) => boolean;
   private _handlingFirstEvent: boolean = false;
 
@@ -69,6 +71,7 @@ export class KeyboardBackend implements Backend {
     this.context = context;
     this.options = options;
     this._isDragTrigger = options?.isDragTrigger ?? isKeyboardDragTrigger;
+    this._previewEnabled = options?.preview ?? true;
 
     this.sourceNodes = new Map();
     this.sourcePreviewNodes = new Map();
