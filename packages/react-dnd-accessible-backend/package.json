@@ -1,6 +1,6 @@
 {
   "name": "react-dnd-accessible-backend",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "author": "Jon Egeland <jon.egeland@discordapp.com>",
   "description": "An add-on backend for react-dnd that provides support for keyboards and screenreaders by default.",
   "license": "MIT",
