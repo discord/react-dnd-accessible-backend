@@ -1,9 +1,10 @@
 import * as React from "react";
-import { render } from "react-dom";
+import { createRoot } from "react-dom/client";
+import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import { DndProvider, createTransition } from "react-dnd-multi-backend";
+import { MultiBackend, createTransition } from "react-dnd-multi-backend";
 
-import KeyboardBackend, { isKeyboardDragTrigger } from "../src";
+import KeyboardBackend, { isKeyboardDragTrigger } from "react-dnd-accessible-backend";
 
 import SortableContainer from "./sortable/SortableContainer";
 
@@ -41,7 +42,7 @@ const DND_OPTIONS = {
 
 function Index() {
   return (
-    <DndProvider options={DND_OPTIONS}>
+    <DndProvider backend={MultiBackend} options={DND_OPTIONS}>
       <h1>Keyboard Drag and Drop Example</h1>
 
       <p>
@@ -78,4 +79,5 @@ function Index() {
   );
 }
 
-render(<Index />, document.getElementById("root"));
+const root = createRoot(document.getElementById("root")!);
+root.render(<Index />);

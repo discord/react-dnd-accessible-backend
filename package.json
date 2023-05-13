@@ -1,63 +1,11 @@
 {
-  "name": "react-dnd-accessible-backend",
-  "version": "1.0.1",
-  "author": "Jon Egeland <jon.egeland@discordapp.com>",
-  "description": "An add-on backend for react-dnd that provides support for keyboards and screenreaders by default.",
-  "license": "MIT",
-  "repository": "discord/react-dnd-accessible-backend",
-  "homepage": "https://github.com/discord/react-dnd-accessible-backend#readme",
-  "keywords": [
-    "a11y",
-    "keyboard",
-    "react",
-    "react-dnd",
-    "dnd",
-    "sortable",
-    "drag-and-drop",
-    "drag-n-drop",
-    "drag-drop",
-    "drag",
-    "drop",
-    "typescript"
-  ],
-  "source": "src/index.tsx",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "module": "dist/index.module.js",
-  "unpkg": "dist/index.umd.js",
-  "files": [
-    "src",
-    "dist"
-  ],
+  "name": "repo-root",
+  "private": true,
+  "version": "0.0.0",
   "scripts": {
-    "format": "prettier --write '**'",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rm -rf dist && microbundle --external react",
-    "examples": "parcel serve examples/index.html",
-    "prepublishOnly": "npm run -s build"
-  },
-  "peerDependencies": {
-    "react": ">=16.8.0",
-    "react-dnd": ">=14.0.0"
+    "format": "prettier --write '**'"
   },
   "devDependencies": {
-    "@types/react": "17.0.26",
-    "@types/react-dom": "17.0.9",
-    "microbundle": "^0.13.3",
-    "parcel": "^2.0.0-rc.0",
-    "prettier": "^2.0.4",
-    "react": "^17.0.2",
-    "react-dnd": "14.0.3",
-    "react-dnd-html5-backend": "14.0.1",
-    "react-dnd-multi-backend": "7.0.0-alpha.4",
-    "react-dom": "^17.0.2",
-    "typescript": "4.4.3"
-  },
-  "bugs": {
-    "url": "https://github.com/discord/react-dnd-accessible-backend/issues"
-  },
-  "dependencies": {
-    "@react-aria/live-announcer": "^3.3.0",
-    "immutability-helper": "^3.1.1"
+    "prettier": "^2.0.4"
   }
 }

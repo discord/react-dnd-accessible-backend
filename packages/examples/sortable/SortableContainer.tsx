@@ -1,6 +1,5 @@
 import * as React from "react";
 import { SortableCard } from "./SortableCard";
-import update from "immutability-helper";
 
 const style = {
   width: 400,
@@ -24,38 +23,29 @@ export default function SortableContainer() {
       { id: 4, text: "Create some examples" },
       {
         id: 5,
-        text:
-          "Spam in Twitter and IRC to promote it (note that this element is taller than the others)",
+        text: "Spam in Twitter and IRC to promote it (note that this element is taller than the others)",
       },
       { id: 6, text: "???" },
       { id: 7, text: "PROFIT" },
     ]);
 
     const moveCard = React.useCallback(
-      (dragIndex: number, hoverIndex: number) => {
-        const dragCard = cards[dragIndex];
-        setCards(
-          update(cards, {
-            $splice: [
-              [dragIndex, 1],
-              [hoverIndex, 0, dragCard],
-            ],
-          }),
-        );
+      (draggedId: number, hoveredId: number) => {
+        const newCards = [...cards];
+        const dragIndex = cards.findIndex((card) => card.id === draggedId);
+        const [dragged] = newCards.splice(dragIndex, 1);
+        const hoverIndex = cards.findIndex((card) => card.id === hoveredId);
+        newCards.splice(hoverIndex, 0, dragged);
+
+        setCards(newCards);
       },
       [cards],
     );
 
     return (
       <div style={style}>
-        {cards.map((card, index) => (
-          <SortableCard
-            key={card.id}
-            index={index}
-            id={card.id}
-            text={card.text}
-            moveCard={moveCard}
-          />
+        {cards.map((card) => (
+          <SortableCard key={card.id} id={card.id} text={card.text} moveCard={moveCard} />
         ))}
       </div>
     );
