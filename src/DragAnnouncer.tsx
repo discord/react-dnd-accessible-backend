@@ -1,50 +1,40 @@
 import { AnnouncementMessages, getDefaultAnnouncementMessages } from "./util/AnnouncementMessages";
 
+type Assertiveness = 'assertive' | 'polite';
+export interface Announcer {
+  announce(message: string, assertiveness?: Assertiveness, timeout?: number): void;
+  clearAnnouncements(assertiveness?: Assertiveness): void;
+  destroy?(): void;
+}
 interface AnnouncerOptions {
   getAnnouncementMessages?: () => AnnouncementMessages;
-  announcerClassName?: string;
+  announcer?: Announcer;
 }
 
 export default class DragAnnouncer {
-  private target: HTMLElement | undefined;
+  private announcer: Announcer;
+  private externalAnnouncer: boolean;
   private getMessages: () => AnnouncementMessages;
 
-  public constructor(
-    private document: Document | undefined,
-    { getAnnouncementMessages, announcerClassName }: AnnouncerOptions = {},
-  ) {
+  public constructor({getAnnouncementMessages, announcer}: AnnouncerOptions = {}) {
     this.getMessages = getAnnouncementMessages ?? getDefaultAnnouncementMessages;
-    this.target = this.document?.createElement("span");
-    if (this.target != null) {
-      this.target.setAttribute("aria-live", "assertive");
-      this.target.setAttribute("aria-atomic", "true");
+    this.externalAnnouncer = false;
 
-      if (announcerClassName) {
-        this.target.className = announcerClassName;
-      } else {
-        this.target.className = "drag-announcer";
-        this.target.style.cssText =
-          "position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); border: 0;";
-      }
+    if (announcer != null) {
+      this.announcer = announcer;
+      this.externalAnnouncer = true;
+    } else {
+      const LiveAnnouncer = require('@react-aria/live-announcer');
+      this.announcer = {
+        announce: LiveAnnouncer.announce,
+        clearAnnouncements: LiveAnnouncer.clearAnnouncer,
+        destroy: LiveAnnouncer.destroyAnnouncer,
+      };
     }
   }
 
-  attach() {
-    if (this.target == null) return;
-    this.document?.body.appendChild(this.target);
-  }
-
-  detach() {
-    const body = this.document?.body;
-    if (this.target == null || body == null) return;
-    if (body.contains(this.target)) {
-      body.removeChild(this.target);
-    }
-  }
-
-  announce(message: string) {
-    if (this.target == null) return;
-    this.target.innerText = message;
+  announce(message: string, assertiveness?: Assertiveness, timeout?: number) {
+    this.announcer.announce(message, assertiveness, timeout);
   }
 
   announceDrag(node: HTMLElement | null, id: string) {
@@ -54,7 +44,6 @@ export default class DragAnnouncer {
 
   announceHover(node: HTMLElement | null, id: string) {
     if (node == null) return;
-
     this.announce(this.getMessages().hoveredTarget(id, node));
   }
 
@@ -67,6 +56,13 @@ export default class DragAnnouncer {
   }
 
   clear() {
-    this.announce("");
+    this.announcer.clearAnnouncements();
+  }
+
+  destroy() {
+    // don't destroy an external announcer, since it is likely used outside of drag-and-drop
+    if (!this.externalAnnouncer) {
+      this.announcer.destroy?.();
+    }
   }
 }

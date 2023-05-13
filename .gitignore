@@ -2,6 +2,5 @@ node_modules
 *.log
 .rts2_cache_*
 .cache
-dist
 
 .parcel-cache/
