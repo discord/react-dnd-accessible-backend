@@ -1,5 +1,8 @@
 export interface FocusManagerOptions {
   getFocusableElements(): HTMLElement[];
+  getActiveElement(): Element | null | undefined;
+  scrollToStart?: () => Promise<unknown>;
+  scrollToEnd?: () => Promise<unknown>;
 }
 
 export interface FocusOptions {
@@ -8,36 +11,45 @@ export interface FocusOptions {
 }
 
 export interface FocusManager {
-  getNextFocusableElement(options?: FocusOptions): HTMLElement | null;
-  getPreviousFocusableElement(options?: FocusOptions): HTMLElement | null;
+  getNextFocusableElement(options?: FocusOptions): Promise<HTMLElement | null>;
+  getPreviousFocusableElement(options?: FocusOptions): Promise<HTMLElement | null>;
   getFirstFocusableElement(): HTMLElement | null;
   getLastFocusableElement(): HTMLElement | null;
 }
 
-export function createFocusManager({ getFocusableElements }: FocusManagerOptions): FocusManager {
-  function getNextFocusableElement(options?: FocusOptions): HTMLElement | null {
-    const currentTarget = options?.from || document.activeElement;
-    if (currentTarget == null) {
-      return null;
-    }
+export function createFocusManager({
+  getFocusableElements,
+  getActiveElement,
+  scrollToStart,
+  scrollToEnd,
+}: FocusManagerOptions): FocusManager {
+  function findNextFocusableElement(currentTarget: Element): HTMLElement | null {
     const elements = getFocusableElements();
-    const nextNode = elements.find((element) => {
-      return !!(
-        currentTarget.compareDocumentPosition(element) &
-        (Node.DOCUMENT_POSITION_FOLLOWING | Node.DOCUMENT_POSITION_CONTAINED_BY)
-      );
-    });
-    if (nextNode == null && options?.wrap) {
-      return elements[0] ?? null;
-    }
-    return nextNode as HTMLElement;
+    return (
+      elements.find((element) => {
+        return !!(
+          currentTarget.compareDocumentPosition(element) &
+          (Node.DOCUMENT_POSITION_FOLLOWING | Node.DOCUMENT_POSITION_CONTAINED_BY)
+        );
+      }) ?? null
+    );
   }
 
-  function getPreviousFocusableElement(options?: FocusOptions): HTMLElement | null {
-    const currentTarget = options?.from || document.activeElement;
+
+  async function getNextFocusableElement(options?: FocusOptions): Promise<HTMLElement | null> {
+    const currentTarget = options?.from || getActiveElement();
     if (currentTarget == null) {
       return null;
     }
+    const next = findNextFocusableElement(currentTarget);
+    if (next == null && options?.wrap) {
+      await scrollToStart?.();
+      return getFirstFocusableElement();
+    }
+    return next;
+  }
+
+  function findPreviousFocusableElement(currentTarget: Element): HTMLElement | null {
     const elements = getFocusableElements();
     for (let i = elements.length - 1; i >= 0; i--) {
       const element = elements[i];
@@ -45,13 +57,23 @@ export function createFocusManager({ getFocusableElements }: FocusManagerOptions
         currentTarget.compareDocumentPosition(element) &
         (Node.DOCUMENT_POSITION_PRECEDING | Node.DOCUMENT_POSITION_CONTAINED_BY)
       ) {
-        return element as HTMLElement;
+        return element;
       }
     }
-    if (options?.wrap) {
-      return elements[elements.length - 1] ?? null;
-    }
     return null;
+  }
+
+  async function getPreviousFocusableElement(options?: FocusOptions): Promise<HTMLElement | null> {
+    const currentTarget = options?.from || getActiveElement();
+    if (currentTarget == null) {
+      return null;
+    }
+    const previous = findPreviousFocusableElement(currentTarget);
+    if (previous == null && options?.wrap) {
+      await scrollToEnd?.();
+      return getLastFocusableElement();
+    }
+    return previous;
   }
 
   function getFirstFocusableElement(): HTMLElement | null {

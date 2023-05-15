@@ -4,7 +4,7 @@ import { createFocusManager, FocusManager } from "./util/FocusManager";
 import getNodeClientOffset from "./util/getNodeClientOffset";
 import stopEvent from "./util/stopEvent";
 
-import type { DragDropActions, DragDropManager, DragDropMonitor } from "dnd-core";
+import type { DragDropActions, DragDropManager, DragDropMonitor} from "dnd-core";
 
 enum NavigationKeys {
   UP = "ArrowUp",
@@ -29,6 +29,7 @@ export class DropTargetNavigator {
     this.currentHoveredNode = sourceNode;
     this.focusManager = createFocusManager({
       getFocusableElements: () => this.getViableTargets(targetNodes),
+      getActiveElement: () => sourceNode.ownerDocument.activeElement,
     });
     this.actions = manager.getActions();
     this.monitor = manager.getMonitor();
@@ -40,16 +41,16 @@ export class DropTargetNavigator {
     window.removeEventListener("keydown", this.handleDraggedElementKeyDown, { capture: true });
   }
 
-  handleDraggedElementKeyDown = (event: KeyboardEvent) => {
+  handleDraggedElementKeyDown = async (event: KeyboardEvent) => {
     switch (event.key) {
       case NavigationKeys.UP:
         stopEvent(event);
-        this.hoverNode(this.getPreviousDropTarget());
+        this.hoverNode(await this.getPreviousDropTarget());
         return;
 
       case NavigationKeys.DOWN:
         stopEvent(event);
-        this.hoverNode(this.getNextDropTarget());
+        this.hoverNode(await this.getNextDropTarget());
         return;
     }
   };
