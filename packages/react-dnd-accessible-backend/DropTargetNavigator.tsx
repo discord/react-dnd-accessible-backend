@@ -15,6 +15,7 @@ enum NavigationKeys {
 
 export class DropTargetNavigator {
   private currentHoveredNode: HTMLElement | null;
+  private dragNode: HTMLElement | null;
   private focusManager: FocusManager;
   private actions: DragDropActions;
   private monitor: DragDropMonitor;
@@ -27,6 +28,7 @@ export class DropTargetNavigator {
     private announcer: DragAnnouncer,
   ) {
     this.currentHoveredNode = sourceNode;
+    this.dragNode = sourceNode;
     this.focusManager = createFocusManager({
       getFocusableElements: () => this.getViableTargets(targetNodes),
     });
@@ -38,6 +40,7 @@ export class DropTargetNavigator {
 
   disconnect() {
     window.removeEventListener("keydown", this.handleDraggedElementKeyDown, { capture: true });
+    this.dragNode?.focus()
   }
 
   handleDraggedElementKeyDown = (event: KeyboardEvent) => {
