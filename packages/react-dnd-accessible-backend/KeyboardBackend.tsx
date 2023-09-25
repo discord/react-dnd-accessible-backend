@@ -194,7 +194,6 @@ export class KeyboardBackend implements Backend {
       item: this.monitor.getItem(),
       itemType: this.monitor.getItemType(),
     });
-    this.actions.publishDragSource();
     this._previewer.render(this.monitor);
     this.setDndMode(true);
     this._announcer.announceDrag(sourceNode, sourceId);
