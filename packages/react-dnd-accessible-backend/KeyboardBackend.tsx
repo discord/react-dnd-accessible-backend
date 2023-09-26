@@ -20,6 +20,7 @@ import type { AnnouncementMessages } from "./util/AnnouncementMessages";
 const Trigger = {
   DROP: [" ", "Enter"],
   CANCEL_DRAG: ["Escape"],
+  TAB: ["Tab"],
 };
 
 function isTrigger(event: KeyboardEvent, trigger: typeof Trigger[keyof typeof Trigger]) {
@@ -112,6 +113,8 @@ export class KeyboardBackend implements Backend {
       const sourceNode = this.sourceNodes.get(sourceId);
       this._announcer.announceCancel(sourceNode ?? null, sourceId);
     }
+    // Prevent tabbing to other elements when dragging locking the focus on drag source
+    if (this.monitor.isDragging() && isTrigger(event, Trigger.TAB)) event.preventDefault();
   };
 
   private setDndMode(enabled: boolean) {
